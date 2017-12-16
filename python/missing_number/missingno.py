@@ -22,7 +22,7 @@ def __estimateLargestValue(seqSize: int) -> int:
         # TODO: The current inputs will never be that large, but
         # if this code is used for larger use cases, another
         # method will need to be implemented.
-        return 0
+        raise ValueError("This value is not supported yet.")
 
 
 def __estimateLargestValueSmall(seqSize: int) -> int:
@@ -52,7 +52,7 @@ def __testWithSize(sequence: str, guessedSize: int) -> int:
     # always be chosen, so we take it out when choosing,
     # and choose one item less.
 
-    enumSeq = enumerate(sequence)
+    enumSeq = list(enumerate(sequence))
     splitPointsList = itertools.combinations(enumSeq[1:], guessedSize - 1)
     for ls in splitPointsList:
         ls = sorted(ls)
@@ -68,6 +68,12 @@ def __testWithSize(sequence: str, guessedSize: int) -> int:
             lastChar = p[i + 1][0]
             fragment = sequence[firstChar:lastChar]
             candidate.append(int(fragment))
+        # This would leave out the last fragment; put it in:
+        firstChar = p[len(p)]
+        candidate.append(int(fragment[firstChar:]))
+
+        # Debug
+        print(candidate)
 
         # Test the candidate
         possibleResult = __testCandidate(candidate)
@@ -118,7 +124,7 @@ def find(sequence: str) -> int:
     counter = itertools.count()
 
     # limit for safety
-    limit = 90000
+    limit = 500
     while limit > 0:
         limit -= 1
         offset = counter.__next__()
@@ -127,7 +133,7 @@ def find(sequence: str) -> int:
         if possibleResult is not None:
             return possibleResult
         # then try with negative offset
-        if offset > 0:      # do not repeat for 0
+        if lengthEstimate - offset > 0:      # do not repeat for 0
             possibleResult = \
                 __testWithSize(sequence, lengthEstimate - offset)
             if possibleResult is not None:
