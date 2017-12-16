@@ -1,0 +1,11 @@
+Question:
+
+Given a String of randomly concatenated integers [0, 250), 0 to 250 exclusive, there is ONE number missing in the sequence. Your job is to write a program that will calculate this missing number. There are no other missing numbers in the sequence besides the one, and that is what makes this problem so difficult, and possibly computationally hard.
+Doing this problem by hand on smaller Strings, such as examples 1 and 2 below are obviously very easy. Conversely, computing a missing number on incredibly large datasets involving three-digit or four-digit numbers would be incredibly difficult. The idea behind this problem is to construct a program that will do this process FOR you.
+
+Important Information:
+One thing that appeared as rather confusing when I posted this problem last night was: what exactly a missing number is defined as. A missing number is the number INSIDE of the range specified above; NOT necessarily the digit. In example 3, you will see that the missing number is 9, even though it appears in the sequence. There are 3 places the DIGIT 9 will appear in a series of [0, 30): “9”, “19”, and “29”. Your objective is to differentiate between these, and discover that 9 is the missing NUMBER (inside of example 3). In other words, the tricky part lies in finding out which sequences of digits are complete and which belong to other numbers.
+
+Input:
+
+The input is a String S, containing integers from 0 to 249 inclusive, or 0 to 250 exclusive (in other words, [0, 250)). These integers, as stated above, are scrambled up to create a random sequence. There are NO delimiters (“42, 31, 23, 44”), or padding 0’s (003076244029002); the problems are exactly as described in the examples. It is guaranteed that there is only 1 solution in the actual problems. Multiple solutions are not permitted for these.
