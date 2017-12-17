@@ -4,7 +4,7 @@ import missingno
 
 def readLines(file: str) -> List[str]:
     content = open(file).readlines()
-    return [x.strip('\n') for x in content]
+    return [str(x.strip('\n')) for x in content]
 
 
 inputLines = readLines("input")
@@ -20,7 +20,10 @@ combinedResult = list(zip(outputLines, producedLines))
 
 hasErrors = False
 for pair in combinedResult:
-    if pair[0] != pair[1]:
+    if pair[1] is None:
+        print("Error: Result could not be found!")
+        hasErrors = True
+    elif pair[0] != pair[1]:
         print("Error:")
         print(f"Expected value: {pair[0]}")
         print(f"Actual value: {pair[1]}")
