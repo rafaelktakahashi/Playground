@@ -33,9 +33,12 @@ def __findMissing(sequence: str, number: int, missingno: int) -> int:
     # and the string is not empty: failure
     if number == -1 and len(sequence) > 0:
         return None
+    # Also valid if there are any characters at all
+    if number == -1 and not sequence.isspace():
+        return None
 
     # Stop condition 2: string is empty
-    if sequence == "":
+    if sequence == "" or sequence.isspace():
         # criteria for success:
         # 1. all numbers have been evaluated (number is now -1)
         # 2. there is a number in the accumulator
@@ -55,7 +58,10 @@ def __findMissing(sequence: str, number: int, missingno: int) -> int:
         right = sequence[occurrence + len(str(number)):]
 
         # recursive call 1:
-        possibleAnswer = __findMissing(left + right, number - 1, missingno)
+        possibleAnswer = __findMissing(
+            left + " " + right,
+            number - 1,
+            missingno)
         if possibleAnswer is not None:
             # bubble up the answer if one was found
             return possibleAnswer
