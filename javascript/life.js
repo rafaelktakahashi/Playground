@@ -22,33 +22,30 @@ window.onload = function() {
 	var canvas = document.getElementById("lifeCanvas");
 	var context = canvas.getContext("2d");
 	
-	debug += "1";
-
 	canvas.width = WIDTH * squareSize;
 	canvas.height = HEIGHT * squareSize;
 
-	debug += "2";
 	// Instantiate two grids, alternate between them
 	mainGrid = new Grid();
 	sideGrid = new Grid();
 
-	debug += "3";
 	// the canvas gets a listener
+	canvas.addEventListener("click", function(event) {
+		var x = event.pageX - canvas.offsetLeft;
+		var y = event.pageY - canvas.offsetTop;
+		
+		// figure out which square was clicked and toggle it
+		var xSquare = Math.floor(x / squareSize);
+		var ySquare = Math.floor(y / squareSize);
+
+		mainGrid.getCell(xSquare, ySquare).toggle();
+		// also ask just the changed cell to redraw
+		mainGrid.getCell(xSquare, ySquare).drawOnCanvas(canvas);
+		return;
+		
+	}, false);
 	canvas.addEventListener("click", handleClick);
 	
-}
-
-// activates or deactivates a cell
-function handleClick(event) {
-	var x = event.pageX - elemLeft;
-	var y = event.pageY - elemTop;
-
-	// figure out which square was clicked and toggle it
-	xSquare = x / WIDTH;
-	ySquare = y / HEIGHT;
-
-	mainGrid.getCell(xSquare, ySquare).toggle();
-	return;
 }
 
 // begins the cycles
@@ -116,26 +113,32 @@ function Cell(x, y, parent) {
 
 	this.drawOnCanvas = function(canvas) {
 		var ctx = canvas.getContext("2d");
-		ctx.fillRect(squareSize * this.x,
+		var drawStrat = null;
+
+		if (this.alive) {
+			drawStrat = function(a,b,c,d) {
+				ctx.fillRect(a,b,c,d);
+			}
+		} else {
+			drawStrat = function(a,b,c,d) {
+				ctx.clearRect(a,b,c,d);
+			}
+		}
+
+		drawStrat(squareSize * this.x,
 			squareSize * this.y,
-			x, y);
-	}
-	this.clearOnCanvas = function(canvas) {
-		var ctx = canvas.getContext("2d");
-		ctx.clearRect(squareSize * this.x,
-			squareSize * this.y,
-			x, y);
+			squareSize, squareSize);
 	}
 
 }
 
-function makeGrid() {
+function makeGrid(parent) {
 	// used only one in the Grid constructor
 	var cells = [];
 	for (var i = 0; i < WIDTH; i++) {
 		cells[i] = [];
 		for (var j = 0; j < HEIGHT; j++) {
-			cells[i][j] = new Cell(i, j, this);
+			cells[i][j] = new Cell(i, j, parent);
 		}
 	}
 	return cells;
@@ -145,43 +148,43 @@ function makeGrid() {
 function Grid() {
 
 	// cells:
-	this.cells = makeGrid();
+	this.cells = makeGrid(this);
 
 	this.getCell = function(x, y) {
-		return cells[i][j];
+		return this.cells[x][y];
 	}
 
 	this.countLiveNeighbors = function(x, y) {
 		var count = 0;
 		
 		var xright = x + 1;
-		if (x == WIDTH) {
-			x = 0;
+		if (xright == WIDTH) {
+			xright = 0;
 		}
 		var xleft = x - 1;
-		if (x == -1) {
-			x = WIDTH - 1;
+		if (xleft == -1) {
+			xleft = WIDTH - 1;
 		}
 		var ytop = y + 1;
-		if (y == HEIGHT) {
-			y = 0;
+		if (ytop == HEIGHT) {
+			ytop = 0;
 		}
 		var ybottom = y - 1;
-		if (y == -1) {
-			y = HEIGHT - 1;
+		if (ybottom == -1) {
+			ybottom = HEIGHT - 1;
 		}
 		
 		// no time to do it right
 
-		if (cells[xleft][y].alive) count++;
-		if (cells[xright][y].alive) count++;
-		if (cells[x][ytop].alive) count++;
-		if (cells[x][ybottom].alive) count++;
+		if (this.cells[xleft][y].alive) count++;
+		if (this.cells[xright][y].alive) count++;
+		if (this.cells[x][ytop].alive) count++;
+		if (this.cells[x][ybottom].alive) count++;
 
-		if (cells[xleft][ytop].alive) count++;
-		if (cells[xleft][ybottom].alive) count++;
-		if (cells[xright][ytop].alive) count++;
-		if (cells[xright][ybottom].alive) count++;
+		if (this.cells[xleft][ytop].alive) count++;
+		if (this.cells[xleft][ybottom].alive) count++;
+		if (this.cells[xright][ytop].alive) count++;
+		if (this.cells[xright][ybottom].alive) count++;
 
 		return count;
 
@@ -192,12 +195,7 @@ function Grid() {
 		for (var i = 0; i < WIDTH; i++) {
 			for (var j = 0; j < HEIGHT; j++) {
 				// render this square
-				if (cells[i][j].alive) {
-					cells[i][j].drawOnCanvas(canvas);
-				} else {
-					// clear
-					cells[i][j].clearInterval(canvas);
-				}
+				this.cells[i][j].drawOnCanvas(canvas);
 			}
 		}
 	}
