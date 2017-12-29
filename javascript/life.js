@@ -80,8 +80,6 @@ function advanceGeneration() {
 	mainGrid.drawOnCanvas(document.getElementById("lifeCanvas"));
 }
 
-// handle a click
-
 // Class for a single cell in the game
 // x and y are 0-indexed integers.
 // parent is the parent grid.
@@ -136,7 +134,7 @@ function makeGrid() {
 	var cells = [];
 	for (var i = 0; i < WIDTH; i++) {
 		cells[i] = [];
-		for (var j = 0; i < HEIGHT; j++) {
+		for (var j = 0; j < HEIGHT; j++) {
 			cells[i][j] = new Cell(i, j, this);
 		}
 	}
