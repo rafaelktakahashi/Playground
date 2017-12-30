@@ -20,8 +20,12 @@ var canvas = null;
 var canvasContext = null;
 // instantiate in entry point
 
-// shortcut
+// shortcut variable
 var SQRT3 = Math.sqrt(3);
+
+// rules for birth and survival
+var B = [3];
+var S = [3,4];
 
 // timer
 var intervalId = null;
@@ -29,7 +33,7 @@ var intervalId = null;
 // entry point
 window.onload = function() {
     canvas = document.getElementById("lifeCanvas");
-    context = canvas.getContext('2d');
+    canvasContext = canvas.getContext('2d');
 
     // vertical distance between hexes is 3/4 side
     // 1.5 * side overcounts one;
@@ -45,6 +49,26 @@ window.onload = function() {
     );
 
     // Instantiate new grids
+    mainGrid = new Grid();
+    sideGrid = new Grid();
+
+    // the canvas gets a listener
+    canvas.addEventListener("click", function(event) {
+        var x = event.pageX - canvas.offsetLeft;
+        var y = event.pageY - canvas.offsetTop;
+
+        // figure out which hex was clicked and toggle it
+        var xHex = 2;
+        var yHex = 2;
+        // TODO
+
+        mainGrid.getCell(xHex, yHex).toggle();
+        // also ask just that cell to redraw
+        mainGrid.getCell(xHex, yHex).drawOnCanvas();
+    }, false);
+    
+    // draw the initial grid
+    mainGrid.drawOnCanvas();
 }
 
 function start() {
@@ -58,7 +82,19 @@ function stop() {
 }
 
 function advanceGeneration() {
-    ;
+    // use the side grid to store new values
+    for (var i = 0; i < HEXWIDTH; i++) {
+        for (var j = 0; j < HEXHEIGHT; j++) {
+            sideGrid.getCell(i, j).alive
+                = mainGrid.getCell(i, j).aliveNextGeneration();
+        }
+    }
+
+    // then, switch grids and rerender
+    var temp = mainGrid;
+    mainGrid = sideGrid;
+    sideGrid = temp;
+    mainGrid.drawOnCanvas();
 }
 
 // Class for a single hexagonal cell
@@ -66,11 +102,31 @@ function Cell(x, y, parent) {
     this.x = x;
     this.y = y;
     this.parent = parent;
-    this.alive = (y / 2 == 1 ? true : false);
+    this.alive = (y % 2 == 1 ? true : false);
 
     this.aliveNextGeneration = function() {
         // true if this cell is going to be alive next
         // generation, regardless of whether it's alive now.
+        var nNeighbors = parent.countLiveNeighbors(this.x, this.y);
+
+        var arrayToCompare = null;
+
+        if (this.alive) {
+            // if this is alive, it needs to survive
+            arrayToCompare = S;
+        }
+        else {
+            // if this is dead, it needs to be born
+            arrayToCompare = B;
+        }
+
+        for (var i = 0; i < arrayToCompare.length; i++) {
+            if (arrayToCompare[i] == nNeighbors) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // method for convenience
@@ -101,7 +157,7 @@ function Cell(x, y, parent) {
         canvasContext.moveTo(xCoordPx, yCoordPx + HEXRADIUS);
         // clockwise:
         for (var i = 0; i < 5; i++) {
-            var point = hex_corder(xCoordPx, yCoordPx, HEXRADIUS, 0);
+            var point = hex_corner(xCoordPx, yCoordPx, HEXRADIUS, 0);
             canvasContext.lineTo(point.x, point.y);
         }
         canvasContext.closePath();
@@ -141,9 +197,44 @@ function Grid() {
     }
 
     this.countLiveNeighbors = function(x, y) {
-        return 0;
+        var count = 0;
+
+        // centers are like in a square grid
+        // but skip top-left and bottom-left
+        for (var offsetX = -1; offsetX <= 1; offsetX++) {
+            for (var offsetY = -1; offsetY <= 1; offsetY++) {
+                // skip center
+                if (offsetX == 0 && offsetY == 0)
+                {continue;}
+                // skip top-left and bottom-left
+                if (offsetX == -1 && offsetY != 0)
+                {continue;}
+
+                var newX = x + offsetX;
+                var newY = y + offsetY;
+
+                // safety checks
+                if (newX == -1)
+                {newX = HEXWIDTH - 1;}
+
+                if (newX == HEXWIDTH)
+                {newX = 0;}
+
+                if (newY == -1)
+                {newY = HEXHEIGHT - 1;}
+
+                if (newY == HEXHEIGHT)
+                {newY = 0;}
+
+                if (this.cells[newX][newY].alive)
+                {count++;}
+
+            }
+        }
+        return count;
     }
 
+    // calls drawOnCanvas on every cell
     this.drawOnCanvas = function() {
         for (var i = 0; i < HEXWIDTH; i++) {
             for (var j = 0; j < HEXHEIGHT; j++) {
