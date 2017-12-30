@@ -1,0 +1,16 @@
+{
+  "name": "hexlife",
+  "version": "1.0.0",
+  "description": "Hexagonal version of Conway's game of life, in plain Javascript.",
+  "main": "server.js",
+  "scripts": {
+	  "start": "node server.js"
+  },
+  "keywords": [
+    "Conway",
+    "life",
+    "hexagonal"
+  ],
+  "author": "Rafael Takahashi",
+  "license": "MIT"
+}
