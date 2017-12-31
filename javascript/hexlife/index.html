@@ -2,20 +2,98 @@
 <html>
 	<head>
 		<title>Hexlife</title>
+
 	</head>
 	<body>
 		<h1>
-			Hexagonal Conway's game of life
+			Two-Dimensional Hexagonal Cellular Automaton
 		</h1>
+		by Rafael Takahashi (github.com/rafaelktakahashi)
+		<br>
 
 		<br>
-		<canvas id="lifeCanvas" style="border:1px solid"></canvas>
+		<canvas id="lifeCanvas"></canvas>
 		<br>
 
 		<button onclick="start()">start</button>
 		<button onclick="stop()">stop</button>
 		<button onclick="advanceGeneration()">advance</button>
-		
+
+		<br>
+		Randomize:
+		<input type="text" id="randomizePercentage" value="50">%
+		&nbsp;
+		<button onclick="randomize()">go</button>
+
+		<br><br>Options:<br><br>
+
+		<table style="border: 1px solid;">
+			<tr>
+				<th colspan="8" style="border-bottom: 1px solid">Rule:</th>
+			</tr>
+
+			<tr>
+				<td>Birth</td>
+				<td><input type="checkbox" name="B" value="0" id="B0" onclick="updateRule()">0&nbsp;&nbsp;&nbsp;</td>
+				<td><input type="checkbox" name="B" value="1" id="B1" onclick="updateRule()">1&nbsp;&nbsp;&nbsp;</td>
+				<td><input type="checkbox" name="B" value="2" id="B2" onclick="updateRule()">2&nbsp;&nbsp;&nbsp;</td>
+				<td><input type="checkbox" name="B" value="3" id="B3" onclick="updateRule()">3&nbsp;&nbsp;&nbsp;</td>
+				<td><input type="checkbox" name="B" value="4" id="B4" onclick="updateRule()">4&nbsp;&nbsp;&nbsp;</td>
+				<td><input type="checkbox" name="B" value="5" id="B5" onclick="updateRule()">5&nbsp;&nbsp;&nbsp;</td>
+				<td><input type="checkbox" name="B" value="6" id="B6" onclick="updateRule()">6&nbsp;&nbsp;&nbsp;</td>
+			</tr>
+
+			<tr>
+				<td>Survival</td>
+				<td><input type="checkbox" name="S" value="0" id="S0" onclick="updateRule()">0&nbsp;&nbsp;&nbsp;</td>
+				<td><input type="checkbox" name="S" value="1" id="S1" onclick="updateRule()">1&nbsp;&nbsp;&nbsp;</td>
+				<td><input type="checkbox" name="S" value="2" id="S2" onclick="updateRule()">2&nbsp;&nbsp;&nbsp;</td>
+				<td><input type="checkbox" name="S" value="3" id="S3" onclick="updateRule()">3&nbsp;&nbsp;&nbsp;</td>
+				<td><input type="checkbox" name="S" value="4" id="S4" onclick="updateRule()">4&nbsp;&nbsp;&nbsp;</td>
+				<td><input type="checkbox" name="S" value="5" id="S5" onclick="updateRule()">5&nbsp;&nbsp;&nbsp;</td>
+				<td><input type="checkbox" name="S" value="6" id="S6" onclick="updateRule()">6&nbsp;&nbsp;&nbsp;</td>
+			</tr>
+
+		</table>
+		<br>
+
+		<table style="border: 1px solid;">
+			<tr>
+				<th colspan="3" style="border-bottom: 1px solid">Palette:</th>
+			</tr>
+
+			<tr>
+				<td>Live cells in safety:</td>
+				<td>#<input type="text" style="font-family:monospace;" id="aliveSafeColorBox"></td>
+				<td><button onclick="setColor('alive_safe', 'aliveSafeColorBox')">Set</button></td>
+			</tr>
+			<tr>
+				<td>Live cells in danger:</td>
+				<td>#<input type="text" style="font-family:monospace;" id="aliveDangerColorBox"></td>
+				<td><button onclick="setColor('alive_danger', 'aliveDangerColorBox')">Set</button></td>
+			</tr>
+			<tr>
+				<td>Fertile dead cells:</td>
+				<td>#<input type="text" style="font-family:monospace;" id="deadFertileColorBox"></td>
+				<td><button onclick="setColor('dead_fertile', 'deadFertileColorBox')">Set</button></td>
+			</tr>
+			<tr>
+				<td>Dead cells:</td>
+				<td>#<input type="text" style="font-family:monospace;" id="deadSterileColorBox"></td>
+				<td><button onclick="setColor('dead_sterile', 'deadSterileColorBox')">Set</button></td>
+			</tr>
+			<tr>
+				<td>Backgroud color:</td>
+				<td>#<input type="text" style="font-family:monospace;" id="backgroundColorBox"></td>
+				<td><button onclick="setColor('background', 'backgroundColorBox')">Set</button></td>
+			</tr>
+			<tr>
+				<td>Mesh color:</td>
+				<td>#<input type="text" style="font-family:monospace;" id="meshColorBox"></td>
+				<td><button onclick="setColor('mesh', 'meshColorBox')">Set</button></td>
+			</tr>
+		</table>
+
 		<script src="hexlife.js" type="text/javascript"></script>
 	</body>
 </html>

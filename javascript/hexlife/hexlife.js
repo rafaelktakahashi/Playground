@@ -27,6 +27,7 @@ var canvasContext = null;
 var SQRT3 = Math.sqrt(3);
 
 // rules for birth and survival
+// do not change these here, there are options on the page
 var B = [2];
 var S = [3,4];
 
@@ -49,12 +50,30 @@ function matchesS(number) {
 }
 
 // timer
+var running = false;
 var intervalId = null;
+
+// colors
+var COLOR_BACKGROUND = "#4080b0";
+var COLOR_MESH = "#4080b0";
+var COLOR_ALIVE_DANGER = "#440000";
+var COLOR_ALIVE_SAFE = "#003300";
+var COLOR_DEAD_STERILE = "#ffffff";
+var COLOR_DEAD_FERTILE = "#e0ffe0";
 
 // entry point
 window.onload = function() {
+
+    // select the default rules on the page:
+    document.getElementById("B2").checked = true;
+    document.getElementById("S3").checked = true;
+    document.getElementById("S4").checked = true;
+
     canvas = document.getElementById("lifeCanvas");
     canvasContext = canvas.getContext('2d');
+
+    // put a border around the canvas
+    canvas.style.border = "10px solid " + COLOR_BACKGROUND;
 
     // vertical distance between hexes is 3/4 side
     // 1.5 * side overcounts one;
@@ -109,9 +128,20 @@ window.onload = function() {
 
     }, false);
     
+    // fill with background color
+    canvasContext.fillStyle = COLOR_BACKGROUND;
+    canvasContext.fillRect(0, 0, canvas.width, canvas.height);
     // draw the initial grid
-    canvasContext.strokeStyle = "#4080b0";
+    canvasContext.strokeStyle = COLOR_MESH;
     mainGrid.drawOnCanvas();
+
+    // put those colors in the textboxes as well
+    document.getElementById("aliveSafeColorBox").value = COLOR_ALIVE_SAFE.slice(1);
+    document.getElementById("aliveDangerColorBox").value = COLOR_ALIVE_DANGER.slice(1);
+    document.getElementById("deadFertileColorBox").value = COLOR_DEAD_FERTILE.slice(1);
+    document.getElementById("deadSterileColorBox").value = COLOR_DEAD_STERILE.slice(1);
+    document.getElementById("backgroundColorBox").value = COLOR_BACKGROUND.slice(1);
+    document.getElementById("meshColorBox").value = COLOR_MESH.slice(1);
 }
 
 // function that converts cube coordinates to odd-r coordinates
@@ -154,16 +184,23 @@ function cube_round(cube) {
     };
 }
 
+// called by start button
 function start() {
-    intervalId = setInterval(advanceGeneration, 200);
-}
-
-function stop() {
-    if (intervalId != null) {
-        clearInterval(intervalId);
+    if (!running) {
+        intervalId = setInterval(advanceGeneration, 200);
+        running = true;
     }
 }
 
+// called by stop button
+function stop() {
+    if (intervalId != null && running) {
+        clearInterval(intervalId);
+        running = false;
+    }
+}
+
+// called by advance button, and also periodically while running
 function advanceGeneration() {
     // use the side grid to store new values
     for (var i = 0; i < HEXWIDTH; i++) {
@@ -177,6 +214,73 @@ function advanceGeneration() {
     var temp = mainGrid;
     mainGrid = sideGrid;
     sideGrid = temp;
+    mainGrid.drawOnCanvas();
+}
+
+// called by randomize button
+// if the percentage isn't a number from 0 to 100, this function does nothing.
+function randomize() {
+    // get percentage
+    var percentage
+        = parseInt(document.getElementById("randomizePercentage").value);
+    if (isNaN(percentage)) {return;}
+
+    if (percentage < 0 || percentage > 100) {return;}
+
+    mainGrid.randomize(percentage); // also draws on canvas
+}
+
+// called when clicking a rule checkbox
+function updateRule() {
+    B = [];
+    for (var i = 0; i < 7; i++) {
+        if (document.getElementById("B" + i).checked) {
+            B.push(i);
+        }
+    }
+    S = [];
+    for (var i = 0; i < 7; i++) {
+        if (document.getElementById("S" + i).checked) {
+            S.push(i);
+        }
+    }
+    mainGrid.drawOnCanvas();
+}
+
+// called when user changes a color
+// possible values: "alive_danger", "alive_safe",
+// "dead_fertile", "dead_sterile", "background", "mesh".
+// if none of these match, the function does nothing.
+// if the colors is not a valid rgb, this function does nothing.
+function setColor(type, colorBoxId) {
+    var re = /[0-9a-fA-F]{6}/;
+    var color = document.getElementById(colorBoxId).value;
+    if (re.exec(color).length == 0) {
+        // not a match
+        return;
+    }
+    color = "#" + color;
+    
+    if (type == "alive_danger")
+    {COLOR_ALIVE_DANGER = color;}
+    else if (type == "alive_safe")
+    {COLOR_ALIVE_SAFE = color;}
+    else if (type == "dead_fertile")
+    {COLOR_DEAD_FERTILE = color;}
+    else if (type == "dead_sterile")
+    {COLOR_DEAD_STERILE = color;}
+    else if (type == "background")
+    {COLOR_BACKGROUND = color;}
+    else if (type == "mesh")
+    {COLOR_MESH = color;}
+    else
+    {return;}
+
+    // rerender everything on the canvas
+    canvasContext.fillStyle = COLOR_BACKGROUND;
+    canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+    // draw the initial grid
+    canvasContext.strokeStyle = COLOR_MESH;
     mainGrid.drawOnCanvas();
 }
 
@@ -273,9 +377,9 @@ function Cell(x, y, parent) {
         if (this.alive) {
             
             if (matchesS(nNeighbors))
-            {canvasContext.fillStyle = "#002200";}
+            {canvasContext.fillStyle = COLOR_ALIVE_SAFE;}
             else
-            {canvasContext.fillStyle = "#440000";}
+            {canvasContext.fillStyle = COLOR_ALIVE_DANGER;}
 
             canvasContext.fill();
             canvasContext.stroke();
@@ -283,9 +387,9 @@ function Cell(x, y, parent) {
         else {
 
             if (matchesB(nNeighbors))
-            {canvasContext.fillStyle = "#e0ffe0";}
+            {canvasContext.fillStyle = COLOR_DEAD_FERTILE;}
             else
-            {canvasContext.fillStyle = "#ffffff";}
+            {canvasContext.fillStyle = COLOR_DEAD_STERILE;}
 
             canvasContext.fill();
             canvasContext.stroke();
@@ -388,5 +492,17 @@ function Grid() {
                 this.cells[i][j].drawOnCanvas();
             }
         }
+    }
+
+    this.randomize = function(percentage) {
+        
+        for (var i = 0; i < HEXWIDTH; i++) {
+            for (var j = 0; j < HEXHEIGHT; j++) {
+                this.cells[i][j].alive
+                    = Math.floor(Math.random() * 100) + 1 <= percentage;
+            }
+        }
+
+        this.drawOnCanvas();
     }
 }
