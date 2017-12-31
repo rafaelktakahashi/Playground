@@ -1,14 +1,17 @@
 
 
+// x is vertical
+// y is horizontal
+
 // Width in hexagons
-var HEXWIDTH = 200;
+var HEXWIDTH = 10;
 
 // Height in hexagons
-var HEXHEIGHT = 100;
+var HEXHEIGHT = 10;
 
 // Radius is actually the distance between center and vertex
 // For a hexagon, that's the same thing as the length of an edge.
-var HEXRADIUS = 10;
+var HEXRADIUS = 30;
 
 // Objects backing the grids
 var mainGrid = null;
@@ -58,6 +61,11 @@ window.onload = function() {
         var y = event.pageY - canvas.offsetTop;
 
         // figure out which hex was clicked and toggle it
+        var q = (x * SQRT3/3 - y / 3) / HEXRADIUS;
+        r = y * 2/3 / HEXRADIUS;
+        // q and r are in axial coordinates, and need
+        // to be rounded to the nearest hex.
+
         var xHex = 2;
         var yHex = 2;
         // TODO
@@ -68,6 +76,7 @@ window.onload = function() {
     }, false);
     
     // draw the initial grid
+    canvasContext.strokeStyle = "#00ccff";
     mainGrid.drawOnCanvas();
 }
 
@@ -102,7 +111,7 @@ function Cell(x, y, parent) {
     this.x = x;
     this.y = y;
     this.parent = parent;
-    this.alive = (y % 2 == 1 ? true : false);
+    this.alive = Boolean(Math.round(Math.random()));
 
     this.aliveNextGeneration = function() {
         // true if this cell is going to be alive next
@@ -145,31 +154,48 @@ function Cell(x, y, parent) {
 
         // first, find the center point of this hexagon
         // x coordinnate (px) is width times x (hex), plus half width
-        xCoordPx = (HEXRADIUS * 2) * SQRT3 * this.x
-            + (HEXRADIUS * 2) * SQRT3 / 2
+        var xCoordPx = HEXRADIUS * SQRT3 * this.x
+            + HEXRADIUS * SQRT3 / 2
             
         // y coordinate (px) is side, plus 1.5 side for each y.
-        yCoordPx = HEXRADIUS + 1.5 * HEXRADIUS * this.y;
+        var yCoordPx = HEXRADIUS + 1.5 * HEXRADIUS * this.y;
 
         // then, find the points around the center.
-        canvasContext.fillStyle = '#f00';
         canvasContext.beginPath();
-        canvasContext.moveTo(xCoordPx, yCoordPx + HEXRADIUS);
+        var point = hex_corner(xCoordPx, yCoordPx, HEXRADIUS, 0, this.y % 2 == 1);
+        canvasContext.moveTo(point.x, point.y);
         // clockwise:
-        for (var i = 0; i < 5; i++) {
-            var point = hex_corner(xCoordPx, yCoordPx, HEXRADIUS, 0);
+        for (var i = 1; i < 6; i++) {
+            var point = hex_corner(xCoordPx, yCoordPx, HEXRADIUS, i, this.y % 2 == 1);
             canvasContext.lineTo(point.x, point.y);
         }
         canvasContext.closePath();
-        canvasContext.fill();
+        
+        // if this cell is alive, fill it with black
+        // otherwise, fill it with white
+        if (this.alive) {
+            canvasContext.fillStyle = '#000000';
+            canvasContext.fill();
+            canvasContext.stroke();
+        }
+        else {
+            canvasContext.fillStyle = '#ffffff';
+            canvasContext.fill();
+            canvasContext.stroke();
+        }
     }
 }
 
-function hex_corner(centerx, centery, size, i) {
+// centerx and centery are coordinates of the hexagon's center
+// size is the edge of the hexagon
+// i is the corner's number, from 0 to 5 (5 is top)
+// oddRow is true if 
+function hex_corner(centerx, centery, size, i, oddRow) {
     var angle_deg = 60 * i + 30;
     var angle_rad = Math.PI / 180 * angle_deg;
     return {
-        x: centerx + size * Math.cos(angle_rad),
+        x: centerx + size * Math.cos(angle_rad)
+            + ( (oddRow ? 1 : 0) * SQRT3/2 * HEXRADIUS),
         y: centery + size * Math.sin(angle_rad)
     }
 }
