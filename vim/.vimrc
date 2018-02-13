@@ -3,7 +3,7 @@
 
 " --------------------------
 " plugins, managed by Vundle
-" required vundle
+" requires vundle
 " --------------------------
 
 set nocompatible
