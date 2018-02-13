@@ -1,0 +1,90 @@
+" Vrapper configuration file for the Vrapper plugin in Eclipse
+
+"-------------
+" Vim settings
+"-------------
+
+" start scrolling before cursor reaches the bottom
+set scrolloff=5
+
+" better case for searching
+set ignorecase
+set smartcase
+
+" incremental highlighting during search
+set incsearch
+" but do not keep matches highlighted
+set nohlsearch
+
+" unnamed register is the system clipboard
+" set clipboard=unnamed
+" disabled because there's a leader key remap for the clipboard
+
+" highlight current line
+set cursorline
+
+
+" -------------------------
+" Vrapper specific settings
+" -------------------------
+
+" use c-n and c-p to move through the content-assist
+set contentassistmode
+
+" use J and K instead to navigate the content assist menu
+camap <s-j> <c-n>
+camap <s-k> <c-p>
+" can also use N and P
+camap <s-n> <c-n>
+camap <s-p> <c-p>
+
+" switching tabs returns to normal mode
+set startnormalmode
+
+" exiting insert mode leaves behind trailing whitespace
+set nocleanindent
+
+
+" ----------------------------------
+" remaps for the leader key
+" leader key is the default backslash
+" ----------------------------------
+
+" copy to system clipboard (use visual selection)
+vnoremap <leader>c "+y
+" cut to system clipboard (use visual selection)
+vnoremap <leader>x "+d
+" paste from system clipboard
+noremap <leader>v "+p
+
+" create blank line up or down
+nnoremap <leader>[ O<esc>j
+nnoremap <leader>] o<esc>k
+" in normal mode: swap lines
+" in visual mode: move entire selection
+nnnoremap <leader>k ddkP
+nnnoremap <leader>j ddp
+nvnoremap <leader>k :m '<-2<cr>gv=gv
+nvnoremap <leader>j :m '>+1<cr>gv=gv
+
+" scrolling half a page
+noremap <leader>d <C-d>
+noremap <leader>u <C-u>
+
+" redo
+noremap <leader>r <C-r>
+
+" move to top or bottom and automatically recenter
+noremap <leader>l Lzz
+noremap <leader>h Hzz
+
+" block selection
+noremap <leader>q <C-v>
+
+
+" Vrapper specific leader remaps
+
+" n and p to move through tabs
+noremap <leader>n :tabnext<cr>
+noremap <leader>p :tabprevious<cr>
+
