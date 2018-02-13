@@ -1,3 +1,11 @@
+" .vimrc by Rafael Kenji Takahashi
+" rafaelktakahashi @ github
+
+" --------------------------
+" plugins, managed by Vundle
+" required vundle
+" --------------------------
+
 set nocompatible
 filetype off
 
@@ -24,6 +32,8 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'brooth/far.vim'
 " syntax highlighting for many languages
 Plugin 'sheerun/vim-polyglot'
+" show marks
+Plugin 'kshenoy/vim-signature'
 " tab autocompletion
 Plugin 'ervandew/supertab'
 " autocompletion for python
@@ -31,6 +41,10 @@ Plugin 'davidhalter/jedi-vim'
 
 call vundle#end()
 filetype plugin indent on
+
+" ------------
+" vim settings
+" ------------
 
 " use syntax highlighting
 syntax on
@@ -89,6 +103,7 @@ set incsearch
 set nohlsearch
 
 " true colors and theming
+" requires vim_airline and the appropriate theme
 set termguicolors
 let &t_8f="[38;2;%lu;%lu;%lum"
 let &t_8b="[48;2;%lu;%lu;%lum"
@@ -97,33 +112,34 @@ let g:airline_theme='deus'
 colorscheme solarized8
 set background=dark
 
+" -----------------------------------
 " remaps for the leader key
 " leader key is the default backslash
+" -----------------------------------
 
 " new file in new tab, must select name afterwards
 noremap <leader>t :vert new 
 " open NERDTree in a tab to the left (requires NERDTree)
 noremap <leader>e :vert NERDTree<cr>
 " copy to system clipboard (use visual selection)
-noremap <leader>c "+y
+vnoremap <leader>c "+y
 " cut to system clipboard (use visual selection)
-noremap <leader>x "+d
+vnoremap <leader>x "+d
 " paste from system clipboard
 noremap <leader>v "+p
 
-" the following bracket remaps exist in the unimpaired plugin,
-" these are my own remaps, partly for when the plugin is unavailable.
-noremap <leader>[<space> O<esc>j
-noremap <leader>]<space> o<esc>j
+" create blank line up or down
+noremap <leader>[ O<esc>j
+noremap <leader>] o<esc>k
+
 " in normal mode: swap lines
 " in visual mode: move entire selection
-" (unimpaired plugin uses [e and ]e for moving lines)
 nnoremap <leader>k ddkP
 nnoremap <leader>j ddp
 vnoremap <leader>k :m '<-2<cr>gv=gv
 vnoremap <leader>j :m '>+1<cr>gv=gv
 
-" scrollilng half a page
+" scrolling half a page
 noremap <leader>d <C-d>
 noremap <leader>u <C-u>
 
@@ -133,3 +149,6 @@ noremap <leader>r <C-r>
 " move to top or bottom and automatically recenter
 noremap <leader>l Lzz
 noremap <leader>h Hzz
+
+" enter block selection mode
+nnoremap <leader>q <C-v>
