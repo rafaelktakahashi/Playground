@@ -1,7 +1,8 @@
 from typing import List
+from balance import canBalance
 
 
-def readLines(file: str) -> list[str]:
+def readLines(file: str) -> List[str]:
     content = open(file).readlines()
     return [str(x.strip('\n')) for x in content]
 
@@ -13,7 +14,7 @@ if len(inputLines) != len(outputLines):
     print("Error: input and output lengths do not match.")
     exit()
 
-producesLines = "TODO"
+producedLines = map(canBalance, inputLines)
 
 combinedResult = list(zip(outputLines, producedLines))
 
