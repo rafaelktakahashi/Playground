@@ -50,6 +50,8 @@ set nocleanindent
 " leader key is the default backslash
 " ----------------------------------
 
+" can also use space as leader key
+map <space> <leader>
 " copy to system clipboard (use visual selection)
 vnoremap <leader>c "+y
 " cut to system clipboard (use visual selection)

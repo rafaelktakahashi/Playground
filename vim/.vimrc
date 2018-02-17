@@ -117,6 +117,8 @@ set background=dark
 " leader key is the default backslash
 " -----------------------------------
 
+" can also use space as leader
+map <space> <leader>
 " new file in new tab, must select name afterwards
 noremap <leader>t :vert new 
 " open NERDTree in a tab to the left (requires NERDTree)
