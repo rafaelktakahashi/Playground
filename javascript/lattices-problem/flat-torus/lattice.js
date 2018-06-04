@@ -29,6 +29,7 @@ function initialize() {
     canvas.height = INITIAL_CANVAS_HEIGHT;
     canvas.width = INITIAL_CANVAS_WIDTH;
     canvas.id = "mainCanvas";
+    canvas.style.cursor = "none";
     main.appendChild(canvas);
     // remember its context
     ctx = canvas.getContext("2d");
@@ -51,15 +52,38 @@ function onrightclick(e) {
 function onmousemove(e) {
     B = {x: e.clientX, y: e.clientY};
     
-    // draw a line, but only if there's an A point
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    renderPoints();
+    renderMainLine();
+}
+
+
+
+// Rendering functions (these do not clear the canvases)
+
+// Render each point that exists.
+function renderPoints() {
     if (A) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#CC1111";
+        ctx.fillRect(A.x - 1, A.y - 1, 3, 3);
+    }
+    if (B) {
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(B.x - 1, B.y - 1, 3, 3);
+    }
+}
+
+// Render the main line from A to B.
+function renderMainLine() {
+    if (A) {
+        ctx.fillStyle="#000000";
         ctx.beginPath();
         ctx.moveTo(A.x, A.y);
         ctx.lineTo(B.x, B.y);
         ctx.stroke();
     }
 }
+
 
 // Register events
 document.addEventListener("click", onclick);
