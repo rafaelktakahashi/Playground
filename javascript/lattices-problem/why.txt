@@ -1,0 +1,4 @@
+This isn't made for any purpose in particular.
+I needed to solve a problem, so I wrote this program to help me visualize it.
+It doesn't do anything particularly interesting.
+
