@@ -1,4 +1,5 @@
 This isn't made for any purpose in particular.
 I needed to solve a problem, so I wrote this program to help me visualize it.
-It doesn't do anything particularly interesting.
 
+You can read about the problem here:
+http://www.math3ma.com/mathema/2018/5/17/is-the-square-a-secure-polygon

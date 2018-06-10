@@ -1,10 +1,7 @@
-// The whole lattice.
-// Has information about pixel sizes.
-
 // --- Some globals ---
 
 // Point that appears on click
-var A = null;
+var A = null; // perhaps an array of points instead? or an enumerator?
 // Point that follows the mouse
 var B = null;
 // Main canvas - initialized on load
@@ -15,6 +12,8 @@ var ctx = null;
 // Constants, mostly for initialization
 var INITIAL_CANVAS_WIDTH = 500;
 var INITIAL_CANVAS_HEIGHT = 500;
+var INITIAL_GRID_WIDTH = INITIAL_CANVAS_WIDTH / 10;
+var INITIAL_GRID_HEIGHT = INITIAL_CANVAS_HEIGHT / 10;
 
 // --- No globals declared beyond this point ---
 
@@ -48,7 +47,7 @@ function onrightclick(e) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-// On mouse move, set point B and redraw if point A is set.
+// Redraw on mouse move. Keep point B at mouse's position.
 function onmousemove(e) {
     B = {x: e.clientX, y: e.clientY};
     
@@ -59,7 +58,16 @@ function onmousemove(e) {
 
 
 
-// Rendering functions (these do not clear the canvases)
+// Rendering functions (these do not clear the canvas)
+
+// Render the grid behind
+function renderGrid() {
+    for (var i = 0; i < INITIAL_GRID_WIDTH; i++) {
+        for (var j = 0; j < INITIAL_GRID_HEIGHT; j++) {
+            // Place a square here
+        }
+    }
+}
 
 // Render each point that exists.
 function renderPoints() {
