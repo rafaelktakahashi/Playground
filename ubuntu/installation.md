@@ -1,14 +1,15 @@
-## Ubuntu Installation Cheat Sheet
+## Get Latest Version of Applications in Ubuntu
 
-Tips for getting the most recent versions of applications in a fresh install of Ubuntu. Most of these can be installed with `sudo apt-get install`, but that may result in an outdated version.  
-__Note__: Starting from Ubuntu 18.04, `sudo apt-get update` is ran automatically after each `sudo add-apt-repository`, and doesn't have to be done manually.
+Tips for getting the most recent versions of various applications in Ubuntu. Most of these can be installed with `sudo apt-get install`, but that may result in an outdated version. Check the version index to see which version of each software you get in your Uubntu version.  
+__Note__: Starting from Ubuntu 18.04, `sudo apt-get update` is ran automatically after each `sudo add-apt-repository`, and doesn't have to be done manually.  
 
 ### Version Index
-Check here if you need / want to install a later version than is available in the Ubuntu repository.
+Check here if you need / want to install a later version than is available in the repository.  
 |Name      |14.04LTS |16.04LTS  |17.10     |18.04LTS  |
 |:---:     |:---:    |:---:     |:---:     |:---:     |
 |Git       |1.9.1-1  |2.7.4-0   |2.14.1-1  |2.17.1-1  |
 |Curl      |7.35.0-1 |7.47.0-1  |7.55.1-1  |7.58.0-2  |
+|Wget      |1.15-1   |1.17.1-1  |1.19.1-3  |1.19.4-1  |
 |Maven     |3.0.5-1  |3.3.9-3   |3.5.0-6   |3.5.2-2   |
 |Tmux      |1.8-5    |2.1-3     |2.5.3     |2.6-3     |
 |Node      |1.3.10   |3.5.2-0   |3.5.2-0   |3.5.2-0   |
@@ -21,9 +22,9 @@ Check here if you need / want to install a later version than is available in th
 **default-jre and default-jdk packages
  
 #### Git
- `sudo add -apt-repository -y ppa:git-core/ppa`  
+`sudo add -apt-repository -y ppa:git-core/ppa`  
 `sudo apt-get update`  
-`sudo apt-get install git -y` 
+`sudo apt-get install git -y`  
 
 #### Curl
 `wget https://curl.haxx.se/download/curl-7.60.0.tar.gz`  
