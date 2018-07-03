@@ -48,10 +48,24 @@ The command `sudo apt-get install default-jdk` installs OpenJDK. To get OracleJD
 `sudo apt-get install openjdk-11-jdk`  
 
 #### Apache Maven
-(TODO)
+Get a Maven tarball. Then,  
+`sudo tar xzvf apache-maven-<tab> /usr/local`  
+Then put a link to the executable in /usr/local/bin:  
+`sudo ln -s /usr/local/apache<tab>/bin/mvn /usr/local/bin/mvn`  
 
 #### SqlDeveloper
-(TODO)
+Get a zip from the official website, then install it to /usr/local/bin:  
+`sudo mv sqldeveloper*.zip /usr/local/bin`  
+`cd /usr/local`  
+`sudo unzip sqldeveloper-<tab>`  
+`sudo chmod +x /usr/local/sqldeveloper/sqldeveloper.sh /usr/local/bin/sqldeveloper`  
+`sudo rm /usr/local/sqldeveloper*.zip` (optional, you can keep the zip, too)  
+Then edit the file /usr/local/sqldeveloper/sqldeveloper.sh so that it contains the following:  
+`#!/bin/bash`  
+`cd /usr/local/sqldeveloper/sqldeveloper/bin && bash sqldeveloper $*`  
+Now, SQL Developer can be launched using the command `sqldeveloper`. The first time, it may query for the path to the Java JDK; find it with:  
+`readlink -f $(which javac)`  
+Generally it should be at /usr/lib/jvm.  
 
 #### Tmux
 Build from source:  
