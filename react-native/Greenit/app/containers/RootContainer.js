@@ -1,4 +1,5 @@
-import { connect } from 'http2';
+import { connect } from 'react-redux';
+import React, { Component, Text, View, StatusBar } from 'react';
 
 class RootContainer extends Component {
   dispatchLoadData(data) {
@@ -9,6 +10,7 @@ class RootContainer extends Component {
     return (
       <View style={{ flex: 1 }}>
         <StatusBar barStyle="light-content" />
+        <Text>Test text</Text>
       </View>
     );
   }

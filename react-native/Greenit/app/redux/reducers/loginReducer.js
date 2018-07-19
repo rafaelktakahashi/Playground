@@ -66,5 +66,7 @@ export function loginReducer(state = initialState, action) {
         hasError: true,
         error: action.payload,
       };
+    default:
+      return state;
   }
 }
