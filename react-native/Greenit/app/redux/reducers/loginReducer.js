@@ -7,6 +7,8 @@ import {
   LOGOUT_FAILURE,
 } from '../actions/actionNames';
 
+// I probably made a mistake by keeping
+// login and user separately.
 const initialState = {
   login: null,
   user: null,
@@ -21,7 +23,7 @@ export function loginReducer(state = initialState, action) {
     case LOGIN_REQUEST:
       return {
         ...state,
-        login: action.userData,
+        login: action.payload,
         isLoggingIn: true,
         isLoggingOut: false,
         hasError: false,
@@ -29,7 +31,7 @@ export function loginReducer(state = initialState, action) {
     case LOGIN_SUCCESS:
       return {
         ...state,
-        user: action.loggedUser,
+        user: action.payload.loggedUser,
         isLoggingIn: false,
         isLoggingOut: false,
         hasError: false,
@@ -55,7 +57,8 @@ export function loginReducer(state = initialState, action) {
         ...state,
         isLoggingIn: false,
         isLoggingOut: false,
-        user: null,
+        login: null, // this resets login info
+        user: null, // this resets logged user info
         hasError: false,
       };
     case LOGOUT_FAILURE:
