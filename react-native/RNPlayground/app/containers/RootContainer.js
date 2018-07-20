@@ -24,6 +24,12 @@ class RootContainer extends Component {
         <Button onPressOut={this.onLogout.bind(this)}>
           <Text>Logout automatically</Text>
         </Button>
+        <Button
+          warning
+          onPressOut={() => this.props.navigation.navigate('Reports')}
+        >
+          <Text>Reports page</Text>
+        </Button>
       </View>
     );
   }

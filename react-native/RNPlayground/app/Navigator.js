@@ -1,6 +1,7 @@
 import { createStackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 import RootContainer from './containers/RootContainer';
+import Reports from './containers/Reports';
 import Login from './containers/Login';
 import Login2 from './containers/Login2';
 import LoginLoading from './containers/LoginLoading';
@@ -53,6 +54,9 @@ export const Stack1Nav = createStackNavigator(
   {
     Home: {
       screen: RootContainer,
+    },
+    Reports: {
+      screen: Reports,
     },
   },
   {

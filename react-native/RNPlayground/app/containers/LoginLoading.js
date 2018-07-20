@@ -3,9 +3,13 @@ import { View, StatusBar } from 'react-native';
 import { Button, Text } from 'native-base';
 
 /**
- * Main container for the login page.
+ * This loading page exists because there's no animated
+ * transition between pages. The login page transitions
+ * here (with the default animation) before jumping to
+ * another stack, giving the impression that there was
+ * an animation while switching stacks.
  */
-export default class Login extends Component {
+export default class LoginLoading extends Component {
   constructor(props) {
     super(props);
   }
