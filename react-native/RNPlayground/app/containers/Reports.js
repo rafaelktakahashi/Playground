@@ -14,15 +14,45 @@ export default class Reports extends Component {
 
   // gets an array full of data
   makeData() {
-    return 4;
+    return [
+      {
+        key: 1,
+        value: 10,
+        unit: '%',
+        fillColor: '#ff0000',
+      },
+      {
+        key: 2,
+        value: 20,
+        unit: '%',
+        fillColor: '#00aa00',
+      },
+      {
+        key: 3,
+        value: 35,
+        unit: '%',
+        fillColor: '#0000ff',
+      },
+      {
+        key: 4,
+        value: 2,
+        unit: '%',
+        fillColor: '#a0a000',
+      },
+      {
+        key: 5,
+        value: 4,
+        unit: '%',
+        fillColor: '#a000a0',
+      }
+    ]
   }
 
   render() {
     return (
       <View>
-        <Text>This is a pretend reports page.</Text>
-        <Text>I made it to play with graphs.</Text>
-        <PieChartie />
+        <Text>This is supposed to be the title, maybe.</Text>
+        <PieChartie data={this.makeData()} />
       </View>
     );
   }
