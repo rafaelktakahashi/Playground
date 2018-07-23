@@ -4,6 +4,8 @@ import RootContainer from './containers/RootContainer';
 import Reports from './containers/Reports';
 import Login from './containers/Login';
 import Login2 from './containers/Login2';
+import Info from './containers/info';
+import Management from './containers/Management';
 import LoginLoading from './containers/LoginLoading';
 import React, { Component } from 'react';
 import NavigationService from './NavigationService';
@@ -11,9 +13,10 @@ import NavigationService from './NavigationService';
 /**
  * -- Stacks --
  * Pages for logged in and logged out states are separated
- * in different stack navigators.
+ * in different stack navigators. In this project:
  * Stack 0 is for logged out users
  * Stack 1 is for logged in users
+ * Stack 2 is for privileged users.
  * In theory, we can have as many stacks as we need, and
  * render only the appropriate one.
  * My naming scheme has higher numbers correspond to more
@@ -58,9 +61,24 @@ export const Stack1Nav = createStackNavigator(
     Reports: {
       screen: Reports,
     },
+    About: {
+      screen: Info,
+    },
   },
   {
     initialRouteName: 'Home',
+    navigationOptions: navOptions,
+  }
+);
+
+export const Stack2Nav = createStackNavigator(
+  {
+    Management: {
+      screen: Management,
+    },
+  },
+  {
+    initialRouteName: 'Management',
     navigationOptions: navOptions,
   }
 );
@@ -89,9 +107,17 @@ class Navigator extends Component {
           }}
         />
       );
-    } else {
+    } else if (!state.privileges.userHasPrivileges) {
       return (
         <Stack1Nav
+          ref={navRef => {
+            NavigationService.setNavigator(navRef);
+          }}
+        />
+      );
+    } else {
+      return (
+        <Stack2Nav
           ref={navRef => {
             NavigationService.setNavigator(navRef);
           }}

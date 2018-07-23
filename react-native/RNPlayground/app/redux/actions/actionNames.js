@@ -12,3 +12,6 @@ export const MAIN_LIST_FAILURE = 'main_list_failure';
 export const LIST_POSTS_REQUEST = 'list_posts_request';
 export const LIST_POSTS_SUCCESS = 'list_posts_success';
 export const LIST_POSTS_FAILURE = 'list_posts_failure';
+
+export const GAIN_PRIVILEGES = 'gain_privileges';
+export const LOSE_PRIVILEGES = 'lose_privileges';

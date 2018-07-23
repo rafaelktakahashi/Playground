@@ -27,7 +27,7 @@ class Login extends Component {
           This is another login page. It also belongs to stack 0, but it's not
           its main page.
         </Text>
-        <Button block success onPressOut={this.onPressOut.bind(this)}>
+        <Button block onPressOut={this.onPressOut.bind(this)}>
           <Text>Login automatically</Text>
         </Button>
         {this.props.hasError && (
@@ -43,12 +43,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  // mock function
+  // mock function that sends a hardcoded user
   dispatchLogin: () => {
     console.log('dispatching the login action');
     dispatch(
       loginRequest({
-        // userdata
         username: 'default',
         password: 'password123',
       })
