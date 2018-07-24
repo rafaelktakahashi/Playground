@@ -34,6 +34,8 @@ allprojects {
     }
 }
 
+// This section is required for the project to build using the correct
+// sdk build tools version. Some dependencies require recent versions.
 subprojects {
     afterEvaluate {project ->
         if (project.hasProperty("android")) {

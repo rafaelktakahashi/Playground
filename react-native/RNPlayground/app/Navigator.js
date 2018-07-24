@@ -1,9 +1,11 @@
-import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
+import { Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import RootContainer from './containers/RootContainer';
 import Reports from './containers/Reports';
 import Login from './containers/Login';
 import Login2 from './containers/Login2';
+import Logout from './containers/Logout';
 import Info from './containers/info';
 import Management from './containers/Management';
 import LoginLoading from './containers/LoginLoading';
@@ -23,6 +25,9 @@ import NavigationService from './NavigationService';
  * privileges, but that's just me.
  */
 
+/**
+ * Common navigation options for all stacks
+ */
 const navOptions = {
   headerStyle: {
     backgroundColor: '#a02020',
@@ -30,8 +35,34 @@ const navOptions = {
   headerTintColor: '#fff',
   headerTitleStyle: {
     fontWeight: 'bold',
+    textAlign: 'center',
+    alignSelf: 'center',
+    flex: 1,
   },
 };
+
+/**
+ * Navigation options with an additional
+ * hanburger menu.
+ */
+const navOptionsWithMenu = ({ navigation }) => ({
+  ...navOptions,
+  headerRight: (
+    <Text
+      style={{
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'white',
+        marginRight: 10,
+      }}
+      onPress={() => {
+        navigation.toggleDrawer();
+      }}
+    >
+      Menu
+    </Text>
+  ),
+});
 
 // Stack navigator for the logged out state
 export const Stack0Nav = createStackNavigator(
@@ -53,21 +84,36 @@ export const Stack0Nav = createStackNavigator(
 );
 
 // Stack navigator for the logged in state
-export const Stack1Nav = createStackNavigator(
+export const HomeNav = createStackNavigator(
   {
-    Home: {
-      screen: RootContainer,
-    },
-    Reports: {
-      screen: Reports,
-    },
-    About: {
-      screen: Info,
-    },
+    Home: { screen: RootContainer },
+    Reports: { screen: Reports },
+    About: { screen: Info },
   },
   {
     initialRouteName: 'Home',
-    navigationOptions: navOptions,
+    navigationOptions: navOptionsWithMenu,
+  }
+);
+
+export const LogoutNav = createStackNavigator(
+  {
+    Logout: { screen: Logout },
+  },
+  {
+    navigationOptions: navOptionsWithMenu,
+  }
+);
+
+export const Stack1Drawer = createDrawerNavigator(
+  {
+    Main: { screen: HomeNav },
+    Logout: { screen: LogoutNav },
+  },
+  {
+    initialRouteName: 'Main',
+    gesturesEnabled: false,
+    drawerPosition: 'right',
   }
 );
 
@@ -109,7 +155,7 @@ class Navigator extends Component {
       );
     } else if (!state.privileges.userHasPrivileges) {
       return (
-        <Stack1Nav
+        <Stack1Drawer
           ref={navRef => {
             NavigationService.setNavigator(navRef);
           }}
