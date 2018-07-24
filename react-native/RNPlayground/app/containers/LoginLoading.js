@@ -16,6 +16,10 @@ export default class LoginLoading extends Component {
 
   static navigationOptions = {
     title: 'Loading...',
+    // hide the back link;
+    // probably a good idea to disable hw button too
+    headerLeft: <View />,
+    headerRight: <View />,
   };
 
   render() {

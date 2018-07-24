@@ -16,6 +16,8 @@ class RootContainer extends Component {
 
   static navigationOptions = {
     title: 'Home page',
+    // fill up space in pages that don't have the back link
+    headerLeft: <View />,
   };
 
   render() {
@@ -23,18 +25,19 @@ class RootContainer extends Component {
       <View style={{ flex: 1 }}>
         <StatusBar barStyle="light-content" />
         <Text>Main page of stack 1.</Text>
+        <Text>&nbsp;</Text>
         <Text>
-          You can't use the back button to go back to stack 0. You'll have to
-          use these buttons to change your current stack.
+          You can't use the back button to go back to stack 0; you'll have to
+          logout to go there. The back button (or swipe-right gesture in iOS)
+          sends you back to the previous page, or to the home page (here) if
+          there's no previous page. Pressing the back button while in the home
+          page exits the app. Other stacks have their own home pages, too.
         </Text>
-        <Text>When you log out, you will be sent to stack 0.</Text>
-        <Text>The back button only works between pages of the same stack.</Text>
-        <Button onPressOut={this.onLogout.bind(this)}>
-          <Text>Logout automatically</Text>
-        </Button>
+        <Text>&nbsp;</Text>
         <Text>The reports page is also part of this stack.</Text>
         <Text>You can go there and use the back button to return here.</Text>
         <Button
+          style={{ margin: 5 }}
           warning
           onPressOut={() => this.props.navigation.navigate('Reports')}
         >
@@ -45,10 +48,15 @@ class RootContainer extends Component {
         <Text>
           This means you can't access the wrong stack through your history.
         </Text>
-        <Button danger onPressOut={this.gainPrivileges.bind(this)}>
+        <Button
+          style={{ margin: 5 }}
+          danger
+          onPressOut={this.gainPrivileges.bind(this)}
+        >
           <Text>Go to stack 2!</Text>
         </Button>
         <Button
+          style={{ margin: 5 }}
           success
           onPress={() => {
             this.props.navigation.navigate('About');
