@@ -9,6 +9,7 @@ import Navigator from './Navigator';
 // sagas
 import rootSaga from './redux/sagas/RootSaga';
 import createSagaMiddleware from 'redux-saga';
+import SplashScreen from 'react-native-splash-screen';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
@@ -20,6 +21,11 @@ const store = createStore(
 sagaMiddleware.run(rootSaga);
 
 export default class App extends Component {
+  componentDidMount() {
+    // hide the splash screen when this is done
+    SplashScreen.hide();
+  }
+
   render() {
     return (
       <Root>
