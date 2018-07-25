@@ -12,6 +12,7 @@ import LoginLoading from './containers/LoginLoading';
 import React, { Component } from 'react';
 import NavigationService from './NavigationService';
 import AnimatedPage from './containers/AnimatedPage';
+import CameraPage from './containers/CameraPage';
 
 /**
  * -- Stacks --
@@ -111,6 +112,7 @@ export const Stack1Drawer = createDrawerNavigator(
     Main: { screen: HomeNav },
     Logout: { screen: LogoutNav },
     Animated: { screen: AnimatedPage },
+    Camera: { screen: CameraPage },
   },
   {
     initialRouteName: 'Main',

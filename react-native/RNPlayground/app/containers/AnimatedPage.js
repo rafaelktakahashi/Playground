@@ -30,11 +30,15 @@ class FadeInView extends Component {
 
 class BlockThatMoves extends Component {
   state = {
-    xPos: new Animated.Value(10),
+    xPos: new Animated.Value(0),
   };
 
-  componentDidMount() {
-    Animated.timing(this.state.xPos, { toValue: 300, duration: 1000 }).start();
+  moveRight() {
+    Animated.timing(this.state.xPos, { toValue: 100, duration: 1000 }).start();
+  }
+
+  moveLeft() {
+    Animated.timing(this.state.xPos, { toValue: 0, duration: 1000 }).start();
   }
 
   render() {
@@ -68,7 +72,7 @@ export default class AnimatedPage extends Component {
         <FadeInView
           style={{
             width: 250,
-            height: 250,
+            height: 100,
             textAlign: 'center',
             margin: 10,
           }}
@@ -81,7 +85,7 @@ export default class AnimatedPage extends Component {
         <BlockThatMoves
           style={{
             width: 250,
-            height: 250,
+            height: 100,
             textAlign: 'center',
             margin: 10,
             backgroundColor: '#4040c0',
