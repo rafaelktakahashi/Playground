@@ -11,6 +11,7 @@ import Management from './containers/Management';
 import LoginLoading from './containers/LoginLoading';
 import React, { Component } from 'react';
 import NavigationService from './NavigationService';
+import AnimatedPage from './containers/AnimatedPage';
 
 /**
  * -- Stacks --
@@ -109,6 +110,7 @@ export const Stack1Drawer = createDrawerNavigator(
   {
     Main: { screen: HomeNav },
     Logout: { screen: LogoutNav },
+    Animated: { screen: AnimatedPage },
   },
   {
     initialRouteName: 'Main',
