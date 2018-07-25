@@ -25,10 +25,14 @@ export default class CameraPage extends Component {
       <View style={{ flex: 1 }}>
         <StatusBar barStyle="light-content" />
         <Text>This is a page that uses the camera.</Text>
+        <Text>We should tell the user to point this somewhere.</Text>
         <RNCamera
           ref={ref => {
             this.camera = ref;
           }}
+          style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}
+          type={RNCamera.Constants.Type.back}
+          flashMode={RNCamera.Constants.FlashMode.auto}
           permissionDialogTitle="Permission to use camera"
           permissionDialogMessage="We need permission to use the camera if you want to use the camera."
           onBarCodeRead={() => {

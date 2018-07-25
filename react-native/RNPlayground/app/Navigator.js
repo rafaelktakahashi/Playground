@@ -85,8 +85,7 @@ export const Stack0Nav = createStackNavigator(
   }
 );
 
-// Stack navigator for the logged in state
-export const HomeNav = createStackNavigator(
+const HomeNav = createStackNavigator(
   {
     Home: { screen: RootContainer },
     Reports: { screen: Reports },
@@ -98,7 +97,7 @@ export const HomeNav = createStackNavigator(
   }
 );
 
-export const LogoutNav = createStackNavigator(
+const LogoutNav = createStackNavigator(
   {
     Logout: { screen: Logout },
   },
@@ -107,12 +106,26 @@ export const LogoutNav = createStackNavigator(
   }
 );
 
+const AnimatedNav = createStackNavigator(
+  {
+    Animated: { screen: AnimatedPage },
+  },
+  { navigationOptions: navOptionsWithMenu }
+);
+
+const CameraNav = createStackNavigator(
+  {
+    Camera: { screen: CameraPage },
+  },
+  { navigationOptions: navOptionsWithMenu }
+);
+
 export const Stack1Drawer = createDrawerNavigator(
   {
     Main: { screen: HomeNav },
     Logout: { screen: LogoutNav },
-    Animated: { screen: AnimatedPage },
-    Camera: { screen: CameraPage },
+    Animated: { screen: AnimatedNav },
+    Camera: { screen: CameraNav },
   },
   {
     initialRouteName: 'Main',
