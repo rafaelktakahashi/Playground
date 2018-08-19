@@ -11,11 +11,14 @@
     "native-base": "^2.7.2",
     "react": "16.4.1",
     "react-native": "0.55.4",
-    "react-native-svg": "^6.4.1",
-    "react-native-svg-charts": "^5.2.0",
+    "react-native-camera": "^1.1.4",
+    "react-native-charts-wrapper": "^0.4.3",
+    "react-native-splash-screen": "^3.1.0",
+    "react-native-version-number": "^0.3.4",
     "react-navigation": "^2.8.0",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
+    "redux-persist": "^5.10.0",
     "redux-saga": "^0.16.0"
   },
   "devDependencies": {

@@ -1,25 +1,35 @@
-import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
+import { Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import RootContainer from './containers/RootContainer';
 import Reports from './containers/Reports';
 import Login from './containers/Login';
 import Login2 from './containers/Login2';
+import Logout from './containers/Logout';
+import Info from './containers/info';
+import Management from './containers/Management';
 import LoginLoading from './containers/LoginLoading';
 import React, { Component } from 'react';
 import NavigationService from './NavigationService';
+import AnimatedPage from './containers/AnimatedPage';
+import CameraPage from './containers/CameraPage';
 
 /**
  * -- Stacks --
  * Pages for logged in and logged out states are separated
- * in different stack navigators.
+ * in different stack navigators. In this project:
  * Stack 0 is for logged out users
  * Stack 1 is for logged in users
+ * Stack 2 is for privileged users.
  * In theory, we can have as many stacks as we need, and
  * render only the appropriate one.
  * My naming scheme has higher numbers correspond to more
  * privileges, but that's just me.
  */
 
+/**
+ * Common navigation options for all stacks
+ */
 const navOptions = {
   headerStyle: {
     backgroundColor: '#a02020',
@@ -27,8 +37,34 @@ const navOptions = {
   headerTintColor: '#fff',
   headerTitleStyle: {
     fontWeight: 'bold',
+    textAlign: 'center',
+    alignSelf: 'center',
+    flex: 1,
   },
 };
+
+/**
+ * Navigation options with an additional
+ * hanburger menu.
+ */
+const navOptionsWithMenu = ({ navigation }) => ({
+  ...navOptions,
+  headerRight: (
+    <Text
+      style={{
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'white',
+        marginRight: 10,
+      }}
+      onPress={() => {
+        navigation.toggleDrawer();
+      }}
+    >
+      Menu
+    </Text>
+  ),
+});
 
 // Stack navigator for the logged out state
 export const Stack0Nav = createStackNavigator(
@@ -49,18 +85,63 @@ export const Stack0Nav = createStackNavigator(
   }
 );
 
-// Stack navigator for the logged in state
-export const Stack1Nav = createStackNavigator(
+const HomeNav = createStackNavigator(
   {
-    Home: {
-      screen: RootContainer,
-    },
-    Reports: {
-      screen: Reports,
-    },
+    Home: { screen: RootContainer },
+    Reports: { screen: Reports },
+    About: { screen: Info },
   },
   {
     initialRouteName: 'Home',
+    navigationOptions: navOptionsWithMenu,
+  }
+);
+
+const LogoutNav = createStackNavigator(
+  {
+    Logout: { screen: Logout },
+  },
+  {
+    navigationOptions: navOptionsWithMenu,
+  }
+);
+
+const AnimatedNav = createStackNavigator(
+  {
+    Animated: { screen: AnimatedPage },
+  },
+  { navigationOptions: navOptionsWithMenu }
+);
+
+const CameraNav = createStackNavigator(
+  {
+    Camera: { screen: CameraPage },
+  },
+  { navigationOptions: navOptionsWithMenu }
+);
+
+export const Stack1Drawer = createDrawerNavigator(
+  {
+    Main: { screen: HomeNav },
+    Logout: { screen: LogoutNav },
+    Animated: { screen: AnimatedNav },
+    Camera: { screen: CameraNav },
+  },
+  {
+    initialRouteName: 'Main',
+    gesturesEnabled: false,
+    drawerPosition: 'right',
+  }
+);
+
+export const Stack2Nav = createStackNavigator(
+  {
+    Management: {
+      screen: Management,
+    },
+  },
+  {
+    initialRouteName: 'Management',
     navigationOptions: navOptions,
   }
 );
@@ -89,9 +170,17 @@ class Navigator extends Component {
           }}
         />
       );
+    } else if (!state.privileges.userHasPrivileges) {
+      return (
+        <Stack1Drawer
+          ref={navRef => {
+            NavigationService.setNavigator(navRef);
+          }}
+        />
+      );
     } else {
       return (
-        <Stack1Nav
+        <Stack2Nav
           ref={navRef => {
             NavigationService.setNavigator(navRef);
           }}
