@@ -13,6 +13,7 @@ import React, { Component } from 'react';
 import NavigationService from './NavigationService';
 import AnimatedPage from './containers/AnimatedPage';
 import CameraPage from './containers/CameraPage';
+import Victory from './containers/Victory';
 
 /**
  * -- Stacks --
@@ -126,6 +127,7 @@ export const Stack1Drawer = createDrawerNavigator(
     Logout: { screen: LogoutNav },
     Animated: { screen: AnimatedNav },
     Camera: { screen: CameraNav },
+    Victory: { screen: Victory },
   },
   {
     initialRouteName: 'Main',

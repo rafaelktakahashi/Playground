@@ -43,6 +43,13 @@ class RootContainer extends Component {
         >
           <Text>Reports page</Text>
         </Button>
+        <Button
+          style={{ margin: 5 }}
+          info
+          onPressOut={() => this.props.navigation.navigate('Victory')}
+        >
+          <Text>Victory Graph</Text>
+        </Button>
         <Text>There can be as many separate stacks as necessary.</Text>
         <Text>Their pages and history will be completely separated.</Text>
         <Text>
